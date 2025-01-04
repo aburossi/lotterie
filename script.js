@@ -63,8 +63,16 @@ document.getElementById('resetButton').addEventListener('click', () => {
     }
 });
 
-// Schüler-Button Handling
-document.getElementById('assignButton').addEventListener('click', () => {
+// Schüler-Input Handling: Slot-Zuweisung bei Enter-Taste
+document.getElementById('nameInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        assignSlot();
+    }
+});
+
+// Funktion zur Slot-Zuweisung
+function assignSlot() {
     const name = document.getElementById('nameInput').value.trim();
     if (name === "") {
         alert("Bitte gib deinen Namen ein.");
@@ -96,7 +104,7 @@ document.getElementById('assignButton').addEventListener('click', () => {
 
     // Zeige Modal mit zugewiesenem Platz
     showModal(`${name}, dein Präsentationsplatz ist: ${assignedSlot.group}, Platz ${assignedSlot.slot}`);
-});
+}
 
 // Funktion zur Aktualisierung der Platz-Anzeigen
 function updateSlotsDisplay() {
@@ -106,32 +114,6 @@ function updateSlotsDisplay() {
     // Leere die Container
     availableContainer.innerHTML = "";
     assignedContainer.innerHTML = "";
-
-    // Gruppiere Plätze nach Gruppe für verfügbare Plätze
-    config.numberOfGroups = config.numberOfGroups || 2; // Fallback
-    for (let groupIndex = 0; groupIndex < config.numberOfGroups; groupIndex++) {
-        const groupName = generateGroupName(groupIndex);
-
-        // Verfügbare Plätze
-        const dayGroupAvailable = document.createElement('div');
-        dayGroupAvailable.classList.add('day-group');
-
-        const dayHeaderAvailable = document.createElement('h3');
-        dayHeaderAvailable.textContent = groupName;
-        dayGroupAvailable.appendChild(dayHeaderAvailable);
-
-        const availableList = document.createElement('ul');
-        availableList.classList.add('slotsList');
-
-        slots.filter(s => s.group === groupName && s.assignedTo === null).forEach(s => {
-            const li = document.createElement('li');
-            li.textContent = `Platz ${s.slot}`;
-            availableList.appendChild(li);
-        });
-
-        dayGroupAvailable.appendChild(availableList);
-        availableContainer.appendChild(dayGroupAvailable);
-    }
 
     // Gruppiere Plätze nach Gruppe für vergebene Plätze
     for (let groupIndex = 0; groupIndex < config.numberOfGroups; groupIndex++) {
@@ -155,6 +137,30 @@ function updateSlotsDisplay() {
 
         dayGroupAssigned.appendChild(assignedList);
         assignedContainer.appendChild(dayGroupAssigned);
+    }
+
+    // Gruppiere Plätze nach Gruppe für verfügbare Plätze
+    for (let groupIndex = 0; groupIndex < config.numberOfGroups; groupIndex++) {
+        const groupName = generateGroupName(groupIndex);
+
+        const dayGroupAvailable = document.createElement('div');
+        dayGroupAvailable.classList.add('day-group');
+
+        const dayHeaderAvailable = document.createElement('h3');
+        dayHeaderAvailable.textContent = groupName;
+        dayGroupAvailable.appendChild(dayHeaderAvailable);
+
+        const availableList = document.createElement('ul');
+        availableList.classList.add('slotsList');
+
+        slots.filter(s => s.group === groupName && s.assignedTo === null).forEach(s => {
+            const li = document.createElement('li');
+            li.textContent = `Platz ${s.slot}`;
+            availableList.appendChild(li);
+        });
+
+        dayGroupAvailable.appendChild(availableList);
+        availableContainer.appendChild(dayGroupAvailable);
     }
 }
 
