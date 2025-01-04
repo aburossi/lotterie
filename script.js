@@ -4,12 +4,8 @@ let config = JSON.parse(localStorage.getItem('config')) || {
     slotsPerDay: 9
 };
 
-console.log("Aktuelle Konfiguration:", config);
-
 // Lade Slots aus LocalStorage oder initialisiere sie
 let slots = JSON.parse(localStorage.getItem('slots')) || [];
-
-console.log("Geladene Slots:", slots);
 
 // Funktion zur Initialisierung der Slots basierend auf der Konfiguration
 function initializeSlots() {
@@ -20,19 +16,16 @@ function initializeSlots() {
         }
     }
     saveSlots();
-    console.log("Slots initialisiert:", slots);
 }
 
 // Speichern der Konfiguration in LocalStorage
 function saveConfig() {
     localStorage.setItem('config', JSON.stringify(config));
-    console.log("Konfiguration gespeichert:", config);
 }
 
 // Speichern der Slots in LocalStorage
 function saveSlots() {
     localStorage.setItem('slots', JSON.stringify(slots));
-    console.log("Slots gespeichert:", slots);
 }
 
 // Admin-Formular Handling
@@ -40,8 +33,6 @@ document.getElementById('adminForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
     const slotsPerDay = parseInt(document.getElementById('slotsPerDay').value);
-
-    console.log("Admin-Formular abgeschickt:", { numberOfDays, slotsPerDay });
 
     if (numberOfDays < 1 || slotsPerDay < 1) {
         alert("Bitte gib gültige Zahlen ein.");
@@ -69,8 +60,6 @@ document.getElementById('resetButton').addEventListener('click', () => {
 // Schüler-Button Handling
 document.getElementById('assignButton').addEventListener('click', () => {
     const name = document.getElementById('nameInput').value.trim();
-    console.log("Schüler-Button geklickt mit Name:", name);
-
     if (name === "") {
         alert("Bitte gib deinen Namen ein.");
         return;
@@ -85,8 +74,6 @@ document.getElementById('assignButton').addEventListener('click', () => {
 
     // Verfügbare Slots filtern
     const availableSlots = slots.filter(s => s.zugewiesenAn === null);
-    console.log("Verfügbare Slots vor der Zuweisung:", availableSlots);
-
     if (availableSlots.length === 0) {
         alert("Keine Slots mehr verfügbar.");
         return;
@@ -94,27 +81,23 @@ document.getElementById('assignButton').addEventListener('click', () => {
 
     // Zufälligen Slot zuweisen
     const randomIndex = Math.floor(Math.random() * availableSlots.length);
-    const assignedSlot = availableSlots[randomIndex];
-    assignedSlot.zugewiesenAn = name;
-
-    console.log("Slot zugewiesen:", assignedSlot);
+    availableSlots[randomIndex].zugewiesenAn = name;
 
     saveSlots();
     updateSlotsDisplay();
     document.getElementById('nameInput').value = "";
 
-    // Starte die Animation
-    showAnimation(`${name} wurde zugewiesen zu Tag ${assignedSlot.tag}, Slot ${assignedSlot.slot}`);
+    // Zeige Modal mit zugewiesenem Slot
+    showModal(`Slot zugewiesen: Tag ${availableSlots[randomIndex].tag}, Slot ${availableSlots[randomIndex].slot}`);
 });
 
 // Funktion zur Aktualisierung der Slot-Anzeigen
 function updateSlotsDisplay() {
-    const grid = document.querySelector('.grid-container');
-    grid.innerHTML = "";
-    console.log("Aktualisiere Slot-Grid...");
+    const listContainer = document.getElementById('slotsListContainer');
+    listContainer.innerHTML = "";
 
+    // Gruppiere Slots nach Tag
     for (let tag = 1; tag <= config.numberOfDays; tag++) {
-        // Erstelle eine Gruppe für jeden Tag
         const dayGroup = document.createElement('div');
         dayGroup.classList.add('day-group');
 
@@ -122,62 +105,73 @@ function updateSlotsDisplay() {
         dayHeader.textContent = `Tag ${tag}`;
         dayGroup.appendChild(dayHeader);
 
-        const slotsContainer = document.createElement('div');
-        slotsContainer.classList.add('slots-container');
+        const dayList = document.createElement('ul');
+        dayList.classList.add('slotsList');
 
-        // Füge Slots für den aktuellen Tag hinzu
-        const slotsForDay = slots.filter(s => s.tag === tag);
-        console.log(`Slots für Tag ${tag}:`, slotsForDay);
-
-        slotsForDay.forEach(s => {
-            const slotDiv = document.createElement('div');
-            slotDiv.classList.add('slot');
-            if (s.zugewiesenAn) {
-                slotDiv.classList.add('assigned');
-                slotDiv.textContent = `Slot ${s.slot}\n${s.zugewiesenAn}`;
-            } else {
-                slotDiv.textContent = `Slot ${s.slot}`;
-            }
-            slotsContainer.appendChild(slotDiv);
+        slots.filter(s => s.tag === tag && s.zugewiesenAn).forEach(s => {
+            const li = document.createElement('li');
+            li.textContent = `Name: ${s.zugewiesenAn} - Slot ${s.slot}`;
+            dayList.appendChild(li);
         });
 
-        dayGroup.appendChild(slotsContainer);
-        grid.appendChild(dayGroup);
+        dayGroup.appendChild(dayList);
+        listContainer.appendChild(dayGroup);
     }
-    console.log("Slot-Grid aktualisiert.");
+
+    updateSlotGrid();
 }
 
-// Funktion zur Anzeige der Animation
-function showAnimation(message) {
-    const animationContainer = document.getElementById('animationContainer');
-    const animationText = document.getElementById('animationText');
+// Funktion zur Aktualisierung des Slot-Grids
+function updateSlotGrid() {
+    const grid = document.querySelector('.grid-container');
+    grid.innerHTML = "";
 
-    animationText.textContent = message;
-    animationContainer.classList.remove('hidden');
-    animationContainer.classList.add('show');
+    slots.forEach(s => {
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('slot');
+        if (s.zugewiesenAn) {
+            slotDiv.classList.add('assigned');
+            slotDiv.innerHTML = `<strong>Tag ${s.tag}, Slot ${s.slot}</strong><br>${s.zugewiesenAn}`;
+        } else {
+            slotDiv.textContent = `Tag ${s.tag}, Slot ${s.slot}`;
+        }
+        grid.appendChild(slotDiv);
+    });
+}
 
-    console.log("Animation gestartet:", message);
+// Modal-Funktionen
+const modal = document.getElementById('modal');
+const modalText = document.getElementById('modalText');
+const closeModalBtn = document.getElementById('closeModal');
 
-    // Nach 5 Sekunden ausblenden
+function showModal(message) {
+    modalText.textContent = message;
+    modal.style.display = "block";
+
+    // Automatisches Schließen nach 3 Sekunden
     setTimeout(() => {
-        animationContainer.classList.remove('show');
-        animationContainer.classList.add('hidden');
-        console.log("Animation ausgeblendet.");
-    }, 5000);
+        modal.style.display = "none";
+    }, 3000);
+}
+
+// Schließen des Modals beim Klick auf das "X"
+closeModalBtn.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Schließen des Modals beim Klick außerhalb des Modal-Inhalts
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }
 
 // Initialisierung beim Laden der Seite
 window.onload = () => {
-    console.log("Seite geladen.");
-
     // Wenn keine Slots vorhanden sind, initialisiere sie
     if (slots.length === 0) {
-        console.log("Keine gespeicherten Slots gefunden. Initialisiere neue Slots.");
         initializeSlots();
-    } else {
-        console.log("Slots geladen:", slots);
     }
-
     // Setze die Admin-Formularwerte basierend auf der Konfiguration
     document.getElementById('numberOfDays').value = config.numberOfDays;
     document.getElementById('slotsPerDay').value = config.slotsPerDay;
