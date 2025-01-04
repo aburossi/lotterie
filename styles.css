@@ -1,16 +1,72 @@
+/* Grundlegende Stile */
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f8ff;
+    display: flex;
     margin: 0;
+    padding: 0;
+    background-color: #f0f8ff;
+}
+
+/* Seitenleiste für Admin-Bereich */
+.sidebar {
+    width: 250px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.admin-section form, .admin-section .reset-button {
+    margin-top: 20px;
+}
+
+.admin-section label {
+    display: block;
+    margin-top: 10px;
+}
+
+.admin-section input[type="number"] {
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+    margin: 5px 0 15px 0;
+    border: none;
+    border-radius: 4px;
+}
+
+.admin-section button, .admin-section .reset-button {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.admin-section button:hover, .admin-section .reset-button:hover {
+    background-color: #45a049;
+    color: white;
+}
+
+/* Hauptinhalt */
+.main-content {
+    flex: 1;
     padding: 20px;
 }
 
-h1 {
+h1, h2 {
     color: #333;
 }
 
-.admin-section, .student-section {
+.student-section {
     margin: 20px auto;
     max-width: 400px;
     padding: 20px;
@@ -19,12 +75,7 @@ h1 {
     background-color: #fff;
 }
 
-label {
-    display: block;
-    margin-top: 10px;
-}
-
-input[type="number"], input[type="text"] {
+.student-section input[type="text"] {
     padding: 10px;
     font-size: 16px;
     width: 80%;
@@ -33,7 +84,7 @@ input[type="number"], input[type="text"] {
     border-radius: 5px;
 }
 
-button {
+.student-section button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -42,41 +93,58 @@ button {
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s;
-    margin-top: 10px;
 }
 
-button:hover {
+.student-section button:hover {
     background-color: #45a049;
 }
 
-#slotGrid {
+/* Vergebene Slots */
+#assignedSlots {
     margin-top: 30px;
 }
 
-.grid-container {
+#slotsListContainer {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-width: 800px;
-    margin: 20px auto;
+    align-items: center;
 }
 
 .day-group {
-    border: 2px solid #4CAF50;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
 }
 
 .day-group h3 {
-    margin-top: 0;
-    color: #4CAF50;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.slots-container {
+.slotsList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.slotsList li {
+    background-color: #e7f3fe;
+    margin: 5px auto;
+    padding: 10px;
+    border: 1px solid #b3d7ff;
+    border-radius: 5px;
+    max-width: 600px;
+    text-align: left;
+}
+
+/* Grid-Stile */
+.grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
+    max-width: 800px;
+    margin: 20px auto;
 }
 
 .slot {
@@ -90,7 +158,6 @@ button:hover {
 
 .slot.assigned {
     background-color: #d1ffd1;
-    cursor: default;
 }
 
 .slot:hover {
@@ -98,31 +165,46 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* Animation-Stile */
-#animationContainer {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(76, 175, 80, 0.9);
-    color: white;
-    padding: 15px 25px;
+/* Modal-Stile */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: hidden; /* Disable scroll */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 0.5s;
-    z-index: 1000;
+    text-align: center;
+    animation: fadeIn 0.5s;
 }
 
-#animationContainer.show {
-    opacity: 1;
-}
-
-.hidden {
-    display: none;
-}
-
-.animation-content {
-    font-size: 18px;
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
