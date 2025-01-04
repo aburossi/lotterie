@@ -81,22 +81,25 @@ document.getElementById('assignButton').addEventListener('click', () => {
 
     // Zufälligen Slot zuweisen
     const randomIndex = Math.floor(Math.random() * availableSlots.length);
-    availableSlots[randomIndex].zugewiesenAn = name;
+    const assignedSlot = availableSlots[randomIndex];
+    assignedSlot.zugewiesenAn = name;
 
     saveSlots();
     updateSlotsDisplay();
     document.getElementById('nameInput').value = "";
 
     // Zeige Modal mit zugewiesenem Slot
-    showModal(`Slot zugewiesen: Tag ${availableSlots[randomIndex].tag}, Slot ${availableSlots[randomIndex].slot}`);
+    showModal(`${name}, dein Präsentationsslot ist: Tag ${assignedSlot.tag}, Slot ${assignedSlot.slot}`);
 });
 
 // Funktion zur Aktualisierung der Slot-Anzeigen
 function updateSlotsDisplay() {
-    const listContainer = document.getElementById('slotsListContainer');
-    listContainer.innerHTML = "";
+    const assignedListContainer = document.getElementById('slotsListContainer');
+    const availableListContainer = document.getElementById('availableSlotsContainer');
+    assignedListContainer.innerHTML = "";
+    availableListContainer.innerHTML = "";
 
-    // Gruppiere Slots nach Tag
+    // Gruppiere Slots nach Tag für vergebene Slots
     for (let tag = 1; tag <= config.numberOfDays; tag++) {
         const dayGroup = document.createElement('div');
         dayGroup.classList.add('day-group');
@@ -115,14 +118,38 @@ function updateSlotsDisplay() {
         });
 
         dayGroup.appendChild(dayList);
-        listContainer.appendChild(dayGroup);
+        assignedListContainer.appendChild(dayGroup);
+    }
+
+    // Gruppiere Slots nach Tag für verfügbare Slots
+    for (let tag = 1; tag <= config.numberOfDays; tag++) {
+        const dayGroup = document.createElement('div');
+        dayGroup.classList.add('day-group');
+
+        const dayHeader = document.createElement('h3');
+        dayHeader.textContent = `Tag ${tag}`;
+        dayGroup.appendChild(dayHeader);
+
+        const dayList = document.createElement('ul');
+        dayList.classList.add('slotsList', 'availableSlotsList');
+
+        slots.filter(s => s.tag === tag && s.zugewiesenAn === null).forEach(s => {
+            const li = document.createElement('li');
+            li.textContent = `Slot ${s.slot}`;
+            dayList.appendChild(li);
+        });
+
+        dayGroup.appendChild(dayList);
+        availableListContainer.appendChild(dayGroup);
     }
 
     updateSlotGrid();
 }
 
-// Funktion zur Aktualisierung des Slot-Grids
+// Funktion zur Aktualisierung des Slot-Grids (optional, kann entfernt werden, wenn nicht benötigt)
 function updateSlotGrid() {
+    // Optional: Wenn du weiterhin ein Raster für alle Slots behalten möchtest
+    /*
     const grid = document.querySelector('.grid-container');
     grid.innerHTML = "";
 
@@ -137,6 +164,7 @@ function updateSlotGrid() {
         }
         grid.appendChild(slotDiv);
     });
+    */
 }
 
 // Modal-Funktionen
