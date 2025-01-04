@@ -62,7 +62,7 @@ body {
     padding: 20px;
 }
 
-h1, h2, h3 {
+h1, h2 {
     color: #333;
 }
 
@@ -99,12 +99,12 @@ h1, h2, h3 {
     background-color: #45a049;
 }
 
-/* Vergebene und verfügbare Slots */
-#assignedSlots, #availableSlots {
+/* Verfügbare und vergebene Slots */
+#availableSlots, #assignedSlots {
     margin-top: 30px;
 }
 
-#slotsListContainer, #availableSlotsContainer {
+#availableSlotsContainer, #slotsListContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -121,6 +121,8 @@ h1, h2, h3 {
     color: white;
     padding: 10px;
     border-radius: 5px;
+    width: 100%;
+    text-align: left;
 }
 
 .slotsList {
@@ -136,15 +138,6 @@ h1, h2, h3 {
     border-radius: 5px;
     max-width: 600px;
     text-align: left;
-}
-
-.availableSlotsList li {
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-}
-
-.availableSlotsList li.assigned {
-    background-color: #d1ffd1;
 }
 
 /* Modal-Stile */
