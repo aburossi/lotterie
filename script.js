@@ -4,8 +4,12 @@ let config = JSON.parse(localStorage.getItem('config')) || {
     slotsPerDay: 9
 };
 
+console.log("Aktuelle Konfiguration:", config);
+
 // Lade Slots aus LocalStorage oder initialisiere sie
 let slots = JSON.parse(localStorage.getItem('slots')) || [];
+
+console.log("Geladene Slots:", slots);
 
 // Funktion zur Initialisierung der Slots basierend auf der Konfiguration
 function initializeSlots() {
@@ -16,16 +20,19 @@ function initializeSlots() {
         }
     }
     saveSlots();
+    console.log("Slots initialisiert:", slots);
 }
 
 // Speichern der Konfiguration in LocalStorage
 function saveConfig() {
     localStorage.setItem('config', JSON.stringify(config));
+    console.log("Konfiguration gespeichert:", config);
 }
 
 // Speichern der Slots in LocalStorage
 function saveSlots() {
     localStorage.setItem('slots', JSON.stringify(slots));
+    console.log("Slots gespeichert:", slots);
 }
 
 // Admin-Formular Handling
@@ -33,6 +40,8 @@ document.getElementById('adminForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
     const slotsPerDay = parseInt(document.getElementById('slotsPerDay').value);
+
+    console.log("Admin-Formular abgeschickt:", { numberOfDays, slotsPerDay });
 
     if (numberOfDays < 1 || slotsPerDay < 1) {
         alert("Bitte gib gültige Zahlen ein.");
@@ -60,6 +69,8 @@ document.getElementById('resetButton').addEventListener('click', () => {
 // Schüler-Button Handling
 document.getElementById('assignButton').addEventListener('click', () => {
     const name = document.getElementById('nameInput').value.trim();
+    console.log("Schüler-Button geklickt mit Name:", name);
+
     if (name === "") {
         alert("Bitte gib deinen Namen ein.");
         return;
@@ -74,6 +85,8 @@ document.getElementById('assignButton').addEventListener('click', () => {
 
     // Verfügbare Slots filtern
     const availableSlots = slots.filter(s => s.zugewiesenAn === null);
+    console.log("Verfügbare Slots vor der Zuweisung:", availableSlots);
+
     if (availableSlots.length === 0) {
         alert("Keine Slots mehr verfügbar.");
         return;
@@ -83,6 +96,8 @@ document.getElementById('assignButton').addEventListener('click', () => {
     const randomIndex = Math.floor(Math.random() * availableSlots.length);
     const assignedSlot = availableSlots[randomIndex];
     assignedSlot.zugewiesenAn = name;
+
+    console.log("Slot zugewiesen:", assignedSlot);
 
     saveSlots();
     updateSlotsDisplay();
@@ -96,6 +111,7 @@ document.getElementById('assignButton').addEventListener('click', () => {
 function updateSlotsDisplay() {
     const grid = document.querySelector('.grid-container');
     grid.innerHTML = "";
+    console.log("Aktualisiere Slot-Grid...");
 
     for (let tag = 1; tag <= config.numberOfDays; tag++) {
         // Erstelle eine Gruppe für jeden Tag
@@ -110,7 +126,10 @@ function updateSlotsDisplay() {
         slotsContainer.classList.add('slots-container');
 
         // Füge Slots für den aktuellen Tag hinzu
-        slots.filter(s => s.tag === tag).forEach(s => {
+        const slotsForDay = slots.filter(s => s.tag === tag);
+        console.log(`Slots für Tag ${tag}:`, slotsForDay);
+
+        slotsForDay.forEach(s => {
             const slotDiv = document.createElement('div');
             slotDiv.classList.add('slot');
             if (s.zugewiesenAn) {
@@ -125,6 +144,7 @@ function updateSlotsDisplay() {
         dayGroup.appendChild(slotsContainer);
         grid.appendChild(dayGroup);
     }
+    console.log("Slot-Grid aktualisiert.");
 }
 
 // Funktion zur Anzeige der Animation
@@ -136,19 +156,28 @@ function showAnimation(message) {
     animationContainer.classList.remove('hidden');
     animationContainer.classList.add('show');
 
+    console.log("Animation gestartet:", message);
+
     // Nach 5 Sekunden ausblenden
     setTimeout(() => {
         animationContainer.classList.remove('show');
         animationContainer.classList.add('hidden');
+        console.log("Animation ausgeblendet.");
     }, 5000);
 }
 
 // Initialisierung beim Laden der Seite
 window.onload = () => {
+    console.log("Seite geladen.");
+
     // Wenn keine Slots vorhanden sind, initialisiere sie
     if (slots.length === 0) {
+        console.log("Keine gespeicherten Slots gefunden. Initialisiere neue Slots.");
         initializeSlots();
+    } else {
+        console.log("Slots geladen:", slots);
     }
+
     // Setze die Admin-Formularwerte basierend auf der Konfiguration
     document.getElementById('numberOfDays').value = config.numberOfDays;
     document.getElementById('slotsPerDay').value = config.slotsPerDay;
