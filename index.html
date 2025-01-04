@@ -17,6 +17,7 @@
             <label for="slotsPerDay">Slots pro Tag:</label>
             <input type="number" id="slotsPerDay" min="1" value="9" required>
             <button type="submit">Konfiguration speichern</button>
+            <button type="button" id="resetButton">Alle Slots zurücksetzen</button>
         </form>
     </div>
 
@@ -27,17 +28,18 @@
         <button id="assignButton">Mein Präsentationsslot</button>
     </div>
 
-    <!-- Vergebene Slots -->
-    <div id="assignedSlots">
-        <h2>Vergebene Slots</h2>
-        <ul id="slotsList"></ul>
-    </div>
-
-    <!-- Slot-Raster -->
+    <!-- Slot-Raster nach Tag gruppiert -->
     <div id="slotGrid">
         <h2>Verfügbare Slots</h2>
         <div class="grid-container">
             <!-- Dynamisch mit JavaScript befüllt -->
+        </div>
+    </div>
+
+    <!-- Animation-Container -->
+    <div id="animationContainer" class="hidden">
+        <div class="animation-content">
+            <p id="animationText"></p>
         </div>
     </div>
 
