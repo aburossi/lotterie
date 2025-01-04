@@ -47,6 +47,16 @@ document.getElementById('adminForm').addEventListener('submit', (e) => {
     alert("Konfiguration und Slots wurden aktualisiert.");
 });
 
+// Reset-Button Handling
+document.getElementById('resetButton').addEventListener('click', () => {
+    if (confirm("Bist du sicher, dass du alle Slot-Zuweisungen zurücksetzen möchtest?")) {
+        initializeSlots();
+        saveSlots();
+        updateSlotsDisplay();
+        alert("Alle Slots wurden zurückgesetzt.");
+    }
+});
+
 // Schüler-Button Handling
 document.getElementById('assignButton').addEventListener('click', () => {
     const name = document.getElementById('nameInput').value.trim();
@@ -71,44 +81,66 @@ document.getElementById('assignButton').addEventListener('click', () => {
 
     // Zufälligen Slot zuweisen
     const randomIndex = Math.floor(Math.random() * availableSlots.length);
-    availableSlots[randomIndex].zugewiesenAn = name;
+    const assignedSlot = availableSlots[randomIndex];
+    assignedSlot.zugewiesenAn = name;
 
     saveSlots();
     updateSlotsDisplay();
     document.getElementById('nameInput').value = "";
-    alert(`Slot zugewiesen: Tag ${availableSlots[randomIndex].tag}, Slot ${availableSlots[randomIndex].slot}`);
+
+    // Starte die Animation
+    showAnimation(`${name} wurde zugewiesen zu Tag ${assignedSlot.tag}, Slot ${assignedSlot.slot}`);
 });
 
 // Funktion zur Aktualisierung der Slot-Anzeigen
 function updateSlotsDisplay() {
-    const list = document.getElementById('slotsList');
-    list.innerHTML = "";
-    slots.forEach(s => {
-        if (s.zugewiesenAn) {
-            const li = document.createElement('li');
-            li.textContent = `Name: ${s.zugewiesenAn} - Tag ${s.tag}, Slot ${s.slot}`;
-            list.appendChild(li);
-        }
-    });
-    updateSlotGrid();
-}
-
-// Funktion zur Aktualisierung des Slot-Grids
-function updateSlotGrid() {
     const grid = document.querySelector('.grid-container');
     grid.innerHTML = "";
 
-    slots.forEach(s => {
-        const slotDiv = document.createElement('div');
-        slotDiv.classList.add('slot');
-        if (s.zugewiesenAn) {
-            slotDiv.classList.add('assigned');
-            slotDiv.textContent = `Tag ${s.tag}, Slot ${s.slot}\n${s.zugewiesenAn}`;
-        } else {
-            slotDiv.textContent = `Tag ${s.tag}, Slot ${s.slot}`;
-        }
-        grid.appendChild(slotDiv);
-    });
+    for (let tag = 1; tag <= config.numberOfDays; tag++) {
+        // Erstelle eine Gruppe für jeden Tag
+        const dayGroup = document.createElement('div');
+        dayGroup.classList.add('day-group');
+
+        const dayHeader = document.createElement('h3');
+        dayHeader.textContent = `Tag ${tag}`;
+        dayGroup.appendChild(dayHeader);
+
+        const slotsContainer = document.createElement('div');
+        slotsContainer.classList.add('slots-container');
+
+        // Füge Slots für den aktuellen Tag hinzu
+        slots.filter(s => s.tag === tag).forEach(s => {
+            const slotDiv = document.createElement('div');
+            slotDiv.classList.add('slot');
+            if (s.zugewiesenAn) {
+                slotDiv.classList.add('assigned');
+                slotDiv.textContent = `Slot ${s.slot}\n${s.zugewiesenAn}`;
+            } else {
+                slotDiv.textContent = `Slot ${s.slot}`;
+            }
+            slotsContainer.appendChild(slotDiv);
+        });
+
+        dayGroup.appendChild(slotsContainer);
+        grid.appendChild(dayGroup);
+    }
+}
+
+// Funktion zur Anzeige der Animation
+function showAnimation(message) {
+    const animationContainer = document.getElementById('animationContainer');
+    const animationText = document.getElementById('animationText');
+
+    animationText.textContent = message;
+    animationContainer.classList.remove('hidden');
+    animationContainer.classList.add('show');
+
+    // Nach 5 Sekunden ausblenden
+    setTimeout(() => {
+        animationContainer.classList.remove('show');
+        animationContainer.classList.add('hidden');
+    }, 5000);
 }
 
 // Initialisierung beim Laden der Seite
