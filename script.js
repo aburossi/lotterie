@@ -1,18 +1,24 @@
 // Initiale Konfiguration laden oder Standardwerte setzen
 let config = JSON.parse(localStorage.getItem('config')) || {
-    numberOfDays: 2,
-    slotsPerDay: 9
+    numberOfGroups: 2,
+    slotsPerGroup: 9
 };
 
-// Lade Slots aus LocalStorage oder initialisiere sie
+// Lade Plätze aus LocalStorage oder initialisiere sie
 let slots = JSON.parse(localStorage.getItem('slots')) || [];
 
-// Funktion zur Initialisierung der Slots basierend auf der Konfiguration
+// Funktion zur Generierung von Gruppenbezeichnungen (z.B. Gruppe A, Gruppe B)
+function generateGroupName(index) {
+    return `Gruppe ${String.fromCharCode(65 + index)}`; // 65 ist 'A' im ASCII
+}
+
+// Funktion zur Initialisierung der Plätze basierend auf der Konfiguration
 function initializeSlots() {
     slots = [];
-    for (let tag = 1; tag <= config.numberOfDays; tag++) {
-        for (let slot = 1; slot <= config.slotsPerDay; slot++) {
-            slots.push({ tag: tag, slot: slot, zugewiesenAn: null });
+    for (let groupIndex = 0; groupIndex < config.numberOfGroups; groupIndex++) {
+        const groupName = generateGroupName(groupIndex);
+        for (let slot = 1; slot <= config.slotsPerGroup; slot++) {
+            slots.push({ group: groupName, slot: slot, assignedTo: null });
         }
     }
     saveSlots();
@@ -23,7 +29,7 @@ function saveConfig() {
     localStorage.setItem('config', JSON.stringify(config));
 }
 
-// Speichern der Slots in LocalStorage
+// Speichern der Plätze in LocalStorage
 function saveSlots() {
     localStorage.setItem('slots', JSON.stringify(slots));
 }
@@ -31,29 +37,29 @@ function saveSlots() {
 // Admin-Formular Handling
 document.getElementById('adminForm').addEventListener('submit', (e) => {
     e.preventDefault();
-    const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
-    const slotsPerDay = parseInt(document.getElementById('slotsPerDay').value);
+    const numberOfGroups = parseInt(document.getElementById('numberOfGroups').value);
+    const slotsPerGroup = parseInt(document.getElementById('slotsPerGroup').value);
 
-    if (numberOfDays < 1 || slotsPerDay < 1) {
+    if (numberOfGroups < 1 || slotsPerGroup < 1) {
         alert("Bitte gib gültige Zahlen ein.");
         return;
     }
 
-    config.numberOfDays = numberOfDays;
-    config.slotsPerDay = slotsPerDay;
+    config.numberOfGroups = numberOfGroups;
+    config.slotsPerGroup = slotsPerGroup;
     saveConfig();
     initializeSlots();
     updateSlotsDisplay();
-    alert("Konfiguration und Slots wurden aktualisiert.");
+    alert("Konfiguration und Plätze wurden aktualisiert.");
 });
 
 // Reset-Button Handling
 document.getElementById('resetButton').addEventListener('click', () => {
-    if (confirm("Bist du sicher, dass du alle Slot-Zuweisungen zurücksetzen möchtest?")) {
+    if (confirm("Bist du sicher, dass du alle Platz-Zuweisungen zurücksetzen möchtest?")) {
         initializeSlots();
         saveSlots();
         updateSlotsDisplay();
-        alert("Alle Slots wurden zurückgesetzt.");
+        alert("Alle Plätze wurden zurückgesetzt.");
     }
 });
 
@@ -65,34 +71,34 @@ document.getElementById('assignButton').addEventListener('click', () => {
         return;
     }
 
-    // Überprüfe, ob der Name bereits einen Slot hat
-    const existing = slots.find(s => s.zugewiesenAn && s.zugewiesenAn.toLowerCase() === name.toLowerCase());
+    // Überprüfe, ob der Name bereits einen Platz hat
+    const existing = slots.find(s => s.assignedTo && s.assignedTo.toLowerCase() === name.toLowerCase());
     if (existing) {
-        alert(`Du hast bereits einen Slot: Tag ${existing.tag}, Slot ${existing.slot}`);
+        alert(`Du hast bereits einen Platz: ${existing.group}, Platz ${existing.slot}`);
         return;
     }
 
-    // Verfügbare Slots filtern
-    const availableSlots = slots.filter(s => s.zugewiesenAn === null);
+    // Verfügbare Plätze filtern
+    const availableSlots = slots.filter(s => s.assignedTo === null);
     if (availableSlots.length === 0) {
-        alert("Keine Slots mehr verfügbar.");
+        alert("Keine Plätze mehr verfügbar.");
         return;
     }
 
-    // Zufälligen Slot zuweisen
+    // Zufälligen Platz zuweisen
     const randomIndex = Math.floor(Math.random() * availableSlots.length);
     const assignedSlot = availableSlots[randomIndex];
-    assignedSlot.zugewiesenAn = name;
+    assignedSlot.assignedTo = name;
 
     saveSlots();
     updateSlotsDisplay();
     document.getElementById('nameInput').value = "";
 
-    // Zeige Modal mit zugewiesenem Slot
-    showModal(`${name}, dein Präsentationsslot ist: Tag ${assignedSlot.tag}, Slot ${assignedSlot.slot}`);
+    // Zeige Modal mit zugewiesenem Platz
+    showModal(`${name}, dein Präsentationsplatz ist: ${assignedSlot.group}, Platz ${assignedSlot.slot}`);
 });
 
-// Funktion zur Aktualisierung der Slot-Anzeigen
+// Funktion zur Aktualisierung der Platz-Anzeigen
 function updateSlotsDisplay() {
     const availableContainer = document.getElementById('availableSlotsContainer');
     const assignedContainer = document.getElementById('slotsListContainer');
@@ -101,21 +107,25 @@ function updateSlotsDisplay() {
     availableContainer.innerHTML = "";
     assignedContainer.innerHTML = "";
 
-    // Gruppiere Slots nach Tag für verfügbare Slots
-    for (let tag = 1; tag <= config.numberOfDays; tag++) {
+    // Gruppiere Plätze nach Gruppe für verfügbare Plätze
+    config.numberOfGroups = config.numberOfGroups || 2; // Fallback
+    for (let groupIndex = 0; groupIndex < config.numberOfGroups; groupIndex++) {
+        const groupName = generateGroupName(groupIndex);
+
+        // Verfügbare Plätze
         const dayGroupAvailable = document.createElement('div');
         dayGroupAvailable.classList.add('day-group');
 
         const dayHeaderAvailable = document.createElement('h3');
-        dayHeaderAvailable.textContent = `Tag ${tag}`;
+        dayHeaderAvailable.textContent = groupName;
         dayGroupAvailable.appendChild(dayHeaderAvailable);
 
         const availableList = document.createElement('ul');
         availableList.classList.add('slotsList');
 
-        slots.filter(s => s.tag === tag && s.zugewiesenAn === null).forEach(s => {
+        slots.filter(s => s.group === groupName && s.assignedTo === null).forEach(s => {
             const li = document.createElement('li');
-            li.textContent = `Slot ${s.slot}`;
+            li.textContent = `Platz ${s.slot}`;
             availableList.appendChild(li);
         });
 
@@ -123,21 +133,23 @@ function updateSlotsDisplay() {
         availableContainer.appendChild(dayGroupAvailable);
     }
 
-    // Gruppiere Slots nach Tag für vergebene Slots
-    for (let tag = 1; tag <= config.numberOfDays; tag++) {
+    // Gruppiere Plätze nach Gruppe für vergebene Plätze
+    for (let groupIndex = 0; groupIndex < config.numberOfGroups; groupIndex++) {
+        const groupName = generateGroupName(groupIndex);
+
         const dayGroupAssigned = document.createElement('div');
         dayGroupAssigned.classList.add('day-group');
 
         const dayHeaderAssigned = document.createElement('h3');
-        dayHeaderAssigned.textContent = `Tag ${tag}`;
+        dayHeaderAssigned.textContent = groupName;
         dayGroupAssigned.appendChild(dayHeaderAssigned);
 
         const assignedList = document.createElement('ul');
         assignedList.classList.add('slotsList');
 
-        slots.filter(s => s.tag === tag && s.zugewiesenAn).forEach(s => {
+        slots.filter(s => s.group === groupName && s.assignedTo).forEach(s => {
             const li = document.createElement('li');
-            li.textContent = `Name: ${s.zugewiesenAn} - Slot ${s.slot}`;
+            li.textContent = `Name: ${s.assignedTo} - Platz ${s.slot}`;
             assignedList.appendChild(li);
         });
 
@@ -175,12 +187,12 @@ window.onclick = function(event) {
 
 // Initialisierung beim Laden der Seite
 window.onload = () => {
-    // Wenn keine Slots vorhanden sind, initialisiere sie
+    // Wenn keine Plätze vorhanden sind, initialisiere sie
     if (slots.length === 0) {
         initializeSlots();
     }
     // Setze die Admin-Formularwerte basierend auf der Konfiguration
-    document.getElementById('numberOfDays').value = config.numberOfDays;
-    document.getElementById('slotsPerDay').value = config.slotsPerDay;
+    document.getElementById('numberOfGroups').value = config.numberOfGroups;
+    document.getElementById('slotsPerGroup').value = config.slotsPerGroup;
     updateSlotsDisplay();
 };
