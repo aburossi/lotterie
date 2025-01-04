@@ -1,16 +1,16 @@
 /* Grundlegende Stile */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     margin: 0;
     padding: 0;
-    background-color: #f0f8ff;
+    background-color: #e0f7fa; /* Leichtes Blau für ein frisches Aussehen */
 }
 
 /* Seitenleiste für Admin-Bereich */
 .sidebar {
     width: 250px;
-    background-color: #4CAF50;
+    background-color: #00695c; /* Dunkelgrünes WM-Thema */
     color: white;
     padding: 20px;
     box-sizing: border-box;
@@ -19,6 +19,8 @@ body {
 
 .sidebar h2 {
     margin-top: 0;
+    border-bottom: 1px solid #004d40;
+    padding-bottom: 10px;
 }
 
 .admin-section form, .admin-section .reset-button {
@@ -28,6 +30,7 @@ body {
 .admin-section label {
     display: block;
     margin-top: 10px;
+    font-weight: bold;
 }
 
 .admin-section input[type="number"] {
@@ -43,8 +46,8 @@ body {
     padding: 10px;
     font-size: 14px;
     cursor: pointer;
-    background-color: #fff;
-    color: #4CAF50;
+    background-color: #ffffff;
+    color: #00695c;
     border: none;
     border-radius: 5px;
     width: 100%;
@@ -52,7 +55,7 @@ body {
 }
 
 .admin-section button:hover, .admin-section .reset-button:hover {
-    background-color: #45a049;
+    background-color: #004d40;
     color: white;
 }
 
@@ -63,24 +66,30 @@ body {
 }
 
 h1, h2 {
-    color: #333;
+    color: #004d40;
 }
 
 .student-section {
     margin: 20px auto;
-    max-width: 400px;
+    max-width: 500px;
     padding: 20px;
-    border: 2px solid #4CAF50;
+    border: 2px solid #00695c;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.student-section h2 {
+    margin-top: 0;
+    text-align: center;
 }
 
 .student-section input[type="text"] {
     padding: 10px;
     font-size: 16px;
-    width: 80%;
+    width: 100%;
     margin: 10px 0;
-    border: 2px solid #4CAF50;
+    border: 2px solid #00695c;
     border-radius: 5px;
 }
 
@@ -88,18 +97,19 @@ h1, h2 {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #4CAF50;
+    background-color: #00695c;
     color: white;
     border: none;
     border-radius: 5px;
+    width: 100%;
     transition: background-color 0.3s;
 }
 
 .student-section button:hover {
-    background-color: #45a049;
+    background-color: #004d40;
 }
 
-/* Verfügbare und vergebene Slots */
+/* Verfügbare und vergebene Plätze */
 #availableSlots, #assignedSlots {
     margin-top: 30px;
 }
@@ -114,30 +124,38 @@ h1, h2 {
     width: 100%;
     max-width: 800px;
     margin-bottom: 20px;
+    background-color: #ffffff;
+    border: 2px solid #00695c;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .day-group h3 {
-    background-color: #4CAF50;
+    background-color: #00695c;
     color: white;
     padding: 10px;
-    border-radius: 5px;
-    width: 100%;
-    text-align: left;
+    border-radius: 5px 5px 0 0;
+    margin: -10px -10px 10px -10px;
+    text-align: center;
+    font-size: 1.2em;
 }
 
 .slotsList {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 .slotsList li {
-    background-color: #e7f3fe;
+    background-color: #e0f2f1;
     margin: 5px auto;
     padding: 10px;
-    border: 1px solid #b3d7ff;
+    border: 1px solid #b2dfdb;
     border-radius: 5px;
     max-width: 600px;
     text-align: left;
+    font-size: 1em;
 }
 
 /* Modal-Stile */
@@ -154,10 +172,10 @@ h1, h2 {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #ffffff;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
+    border: 2px solid #00695c;
     width: 80%;
     max-width: 400px;
     border-radius: 10px;
@@ -166,7 +184,7 @@ h1, h2 {
 }
 
 .close {
-    color: #aaa;
+    color: #00695c;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -175,7 +193,7 @@ h1, h2 {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #004d40;
     text-decoration: none;
 }
 
@@ -197,6 +215,6 @@ h1, h2 {
     }
 
     .day-group h3 {
-        font-size: 1.2em;
+        font-size: 1em;
     }
 }
