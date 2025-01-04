@@ -63,12 +63,9 @@ document.getElementById('resetButton').addEventListener('click', () => {
     }
 });
 
-// Schüler-Input Handling: Slot-Zuweisung bei Enter-Taste
-document.getElementById('nameInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        assignSlot();
-    }
+// Schüler-Button Handling
+document.getElementById('assignButton').addEventListener('click', () => {
+    assignSlot();
 });
 
 // Funktion zur Slot-Zuweisung
