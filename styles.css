@@ -41,6 +41,22 @@ body {
     box-sizing: border-box;
 }
 
+.student-section button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #00695c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.student-section button:hover {
+    background-color: #004d40;
+}
+
 /* Admin-Bereich */
 .admin-section h2 {
     margin-top: 0;
