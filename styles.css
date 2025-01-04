@@ -7,17 +7,42 @@ body {
     background-color: #e0f7fa; /* Leichtes Blau für ein frisches Aussehen */
 }
 
-/* Seitenleiste für Admin-Bereich */
+/* Seitenleiste für Schüler- und Admin-Bereich */
 .sidebar {
-    width: 250px;
+    width: 300px;
     background-color: #00695c; /* Dunkelgrünes WM-Thema */
     color: white;
     padding: 20px;
     box-sizing: border-box;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
-.sidebar h2 {
+/* Schüler-Sektion */
+.student-section {
+    margin-bottom: 40px;
+}
+
+.student-section h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #004d40;
+    padding-bottom: 10px;
+}
+
+.student-section input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Admin-Bereich */
+.admin-section h2 {
     margin-top: 0;
     border-bottom: 1px solid #004d40;
     padding-bottom: 10px;
@@ -67,54 +92,19 @@ body {
 
 h1, h2 {
     color: #004d40;
-}
-
-.student-section {
-    margin: 20px auto;
-    max-width: 500px;
-    padding: 20px;
-    border: 2px solid #00695c;
-    border-radius: 10px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.student-section h2 {
-    margin-top: 0;
     text-align: center;
 }
 
-.student-section input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    margin: 10px 0;
-    border: 2px solid #00695c;
-    border-radius: 5px;
+.main-content h1 {
+    margin-bottom: 40px;
 }
 
-.student-section button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #00695c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-.student-section button:hover {
-    background-color: #004d40;
-}
-
-/* Verfügbare und vergebene Plätze */
-#availableSlots, #assignedSlots {
+/* Vergebene und verfügbare Plätze */
+#assignedSlots, #availableSlots {
     margin-top: 30px;
 }
 
-#availableSlotsContainer, #slotsListContainer {
+#slotsListContainer, #availableSlotsContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -216,5 +206,9 @@ h1, h2 {
 
     .day-group h3 {
         font-size: 1em;
+    }
+
+    .student-section, .admin-section {
+        margin-bottom: 20px;
     }
 }
