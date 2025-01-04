@@ -2,18 +2,24 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Auslösung Präsentationsslots</title>
+    <title>WM-Gruppenphase Präsentationsslot-Verteilung</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="sidebar">
+        <!-- Schüler-Bereich -->
+        <div class="student-section">
+            <h2>Name eintragen</h2>
+            <input type="text" id="nameInput" placeholder="Dein Name" autocomplete="off">
+        </div>
+        
         <!-- Admin-Bereich -->
         <div class="admin-section">
             <h2>Admin</h2>
             <form id="adminForm">
-                <label for="numberOfGroups">Anzahl Tage:</label>
+                <label for="numberOfGroups">Anzahl der Gruppen:</label>
                 <input type="number" id="numberOfGroups" min="1" value="2" required>
-                <label for="slotsPerGroup">Plätze pro Tag:</label>
+                <label for="slotsPerGroup">Plätze pro Gruppe:</label>
                 <input type="number" id="slotsPerGroup" min="1" value="9" required>
                 <button type="submit">Speichern</button>
             </form>
@@ -22,14 +28,7 @@
     </div>
 
     <div class="main-content">
-        <h1>Auslösung Präsentationsslots</h1>
-
-        <!-- Schüler-Bereich umbenannt -->
-        <div class="student-section">
-            <h2>Name eintragen</h2>
-            <input type="text" id="nameInput" placeholder="Dein Name">
-            <button id="assignButton">Mein Präsentationsplatz</button>
-        </div>
+        <h1>WM-Gruppenphase Präsentationsslot-Verteilung</h1>
 
         <!-- Vergebene Plätze nach Gruppen gruppiert -->
         <div id="assignedSlots">
@@ -47,6 +46,7 @@
             </div>
         </div>
     </div>    
+
     <!-- Modal für Animation -->
     <div id="modal" class="modal">
         <div class="modal-content">
