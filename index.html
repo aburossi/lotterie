@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Präsentationsslot-Verteilung</title>
+    <title>WM-Gruppenphase Präsentationsslot-Verteilung</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,38 +11,37 @@
         <div class="admin-section">
             <h2>Admin</h2>
             <form id="adminForm">
-                <label for="numberOfDays">Anzahl der Tage:</label>
-                <input type="number" id="numberOfDays" min="1" value="2" required>
-                <label for="slotsPerDay">Slots pro Tag:</label>
-                <input type="number" id="slotsPerDay" min="1" value="9" required>
+                <label for="numberOfGroups">Anzahl der Gruppen:</label>
+                <input type="number" id="numberOfGroups" min="1" value="2" required>
+                <label for="slotsPerGroup">Plätze pro Gruppe:</label>
+                <input type="number" id="slotsPerGroup" min="1" value="9" required>
                 <button type="submit">Speichern</button>
             </form>
-            <button id="resetButton" class="reset-button">Alle Slots zurücksetzen</button>
+            <button id="resetButton" class="reset-button">Alle Plätze zurücksetzen</button>
         </div>
     </div>
 
     <div class="main-content">
-        <h1>Präsentationsslot-Verteilung</h1>
+        <h1>WM-Gruppenphase Präsentationsslot-Verteilung</h1>
 
         <!-- Schüler-Bereich umbenannt -->
         <div class="student-section">
             <h2>Name eintragen</h2>
             <input type="text" id="nameInput" placeholder="Dein Name">
-            <button id="assignButton">Mein Präsentationsslot</button>
+            <button id="assignButton">Mein Präsentationsplatz</button>
         </div>
 
-        <!-- Vergebene Slots nach Tagen gruppiert -->
+        <!-- Vergebene Plätze nach Gruppen gruppiert -->
         <div id="assignedSlots">
-            <h2>Vergebene Slots</h2>
+            <h2>Vergebene Plätze</h2>
             <div id="slotsListContainer">
                 <!-- Dynamisch mit JavaScript befüllt -->
             </div>
         </div>
 
-    
-        <!-- Verfügbare Slots nach Tagen gruppiert -->
+        <!-- Verfügbare Plätze nach Gruppen gruppiert -->
         <div id="availableSlots">
-            <h2>Verfügbare Slots</h2>
+            <h2>Verfügbare Plätze</h2>
             <div id="availableSlotsContainer">
                 <!-- Dynamisch mit JavaScript befüllt -->
             </div>
