@@ -7,9 +7,9 @@ let config = JSON.parse(localStorage.getItem('config')) || {
 // Lade Plätze aus LocalStorage oder initialisiere sie
 let slots = JSON.parse(localStorage.getItem('slots')) || [];
 
-// Funktion zur Generierung von Gruppenbezeichnungen (z.B. Gruppe A, Gruppe B)
+// Funktion zur Generierung von Tag-Bezeichnungen (z.B. Tag 1, Tag 2)
 function generateGroupName(index) {
-    return `Gruppe ${String.fromCharCode(65 + index)}`; // 65 ist 'A' im ASCII
+    return `Tag ${index + 1}`;
 }
 
 // Funktion zur Initialisierung der Plätze basierend auf der Konfiguration
