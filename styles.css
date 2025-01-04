@@ -62,7 +62,7 @@ body {
     padding: 20px;
 }
 
-h1, h2 {
+h1, h2, h3 {
     color: #333;
 }
 
@@ -99,12 +99,12 @@ h1, h2 {
     background-color: #45a049;
 }
 
-/* Vergebene Slots */
-#assignedSlots {
+/* Vergebene und verfügbare Slots */
+#assignedSlots, #availableSlots {
     margin-top: 30px;
 }
 
-#slotsListContainer {
+#slotsListContainer, #availableSlotsContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -138,31 +138,13 @@ h1, h2 {
     text-align: left;
 }
 
-/* Grid-Stile */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-    max-width: 800px;
-    margin: 20px auto;
+.availableSlotsList li {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
 }
 
-.slot {
-    background-color: #fff;
-    border: 2px solid #4CAF50;
-    border-radius: 5px;
-    padding: 20px;
-    text-align: center;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.slot.assigned {
+.availableSlotsList li.assigned {
     background-color: #d1ffd1;
-}
-
-.slot:hover {
-    background-color: #f1f1f1;
-    transform: scale(1.05);
 }
 
 /* Modal-Stile */
@@ -207,4 +189,21 @@ h1, h2 {
 @keyframes fadeIn {
     from {opacity: 0;}
     to {opacity: 1;}
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .day-group h3 {
+        font-size: 1.2em;
+    }
 }
